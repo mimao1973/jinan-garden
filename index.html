@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>锦岸花园 - 便民服务平台</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: "Microsoft YaHei", "PingFang SC", sans-serif; background: #f0f4f8; color: #333; }
+        
+        /* 顶部导航 */
+        .header { background: linear-gradient(135deg, #2d6a4f, #40916c, #52b788); color: white; padding: 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.15); }
+        .header-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-icon { font-size: 32px; }
+        .logo-text h1 { font-size: 22px; font-weight: 700; letter-spacing: 2px; }
+        .logo-text p { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+        .header-date { font-size: 13px; opacity: 0.9; }
+        
+        .nav { display: flex; background: rgba(0,0,0,0.1); }
+        .nav-item { flex: 1; text-align: center; padding: 10px 0; cursor: pointer; font-size: 15px; transition: all 0.3s; border-bottom: 3px solid transparent; }
+        .nav-item:hover { background: rgba(255,255,255,0.1); }
+        .nav-item.active { background: rgba(255,255,255,0.15); border-bottom-color: #fff; font-weight: 600; }
+
+        /* 主内容区 */
+        .container { max-width: 800px; margin: 0 auto; padding: 15px; }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* 公告区 */
+        .notice-bar { background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 10px 15px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-size: 14px; overflow: hidden; }
+        .notice-bar .tag { background: #ffc107; color: #333; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .notice-bar .text { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .notice-bar .arrow { color: #999; }
+
+        /* 卡片 */
+        .card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); transition: transform 0.2s; }
+        .card:hover { transform: translateY(-1px); box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .card-title { font-size: 16px; font-weight: 600; color: #2d3436; }
+        .card-time { font-size: 12px; color: #999; }
+        .card-body { font-size: 14px; color: #555; line-height: 1.6; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #f0f0f0; }
+        .card-contact { font-size: 13px; color: #40916c; font-weight: 500; }
+        .card-tag { font-size: 12px; padding: 2px 10px; border-radius: 20px; }
+
+        /* 标签颜色 */
+        .tag-sale { background: #ffe0e0; color: #e74c3c; }
+        .tag-rent { background: #e0f0ff; color: #2980b9; }
+        .tag-free { background: #e0ffe0; color: #27ae60; }
+        .tag-notice { background: #fff3cd; color: #f39c12; }
+        .tag-suggest { background: #f0e0ff; color: #8e44ad; }
+
+        /* 发布按钮 */
+        .fab { position: fixed; bottom: 80px; right: 20px; width: 50px; height: 50px; background: linear-gradient(135deg, #40916c, #52b788); color: white; border: none; border-radius: 50%; font-size: 28px; cursor: pointer; box-shadow: 0 4px 12px rgba(64,145,108,0.4); z-index: 50; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; }
+        .fab:hover { transform: scale(1.1); }
+
+        /* 发布弹窗 */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 200; align-items: flex-end; justify-content: center; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 16px 16px 0 0; width: 100%; max-width: 800px; padding: 20px; max-height: 85vh; overflow-y: auto; }
+        .modal h2 { font-size: 18px; margin-bottom: 15px; text-align: center; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #555; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; font-family: inherit; }
+        .form-group textarea { min-height: 80px; resize: vertical; }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: #40916c; box-shadow: 0 0 0 3px rgba(64,145,108,0.1); }
+        .btn-row { display: flex; gap: 10px; margin-top: 16px; }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: linear-gradient(135deg, #40916c, #52b788); color: white; }
+        .btn-cancel { background: #f0f0f0; color: #666; }
+
+        /* 空状态 */
+        .empty { text-align: center; padding: 40px 20px; color: #bbb; }
+        .empty-icon { font-size: 48px; margin-bottom: 10px; }
+        .empty-text { font-size: 15px; }
+
+        /* 底部 */
+        .footer { text-align: center; padding: 20px; font-size: 12px; color: #999; margin-top: 10px; }
+
+        /* 分类筛选 */
+        .filter-bar { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .filter-btn { padding: 6px 14px; border-radius: 20px; border: 1px solid #ddd; background: white; font-size: 13px; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+        .filter-btn.active { background: #40916c; color: white; border-color: #40916c; }
+
+        /* 统计条 */
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
+        .stat-item { background: white; border-radius: 10px; padding: 12px 8px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+        .stat-num { font-size: 22px; font-weight: 700; color: #40916c; }
+        .stat-label { font-size: 12px; color: #999; margin-top: 4px; }
+
+        @media (max-width: 600px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .logo-text h1 { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- 顶部 -->
+<div class="header">
+    <div class="header-top">
+        <div class="logo">
+            <span class="logo-icon">🏡</span>
+            <div class="logo-text">
+                <h1>锦岸花园</h1>
+                <p>513000.net 便民服务平台</p>
+            </div>
+        </div>
+        <div class="header-date" id="headerDate"></div>
+    </div>
+    <div class="nav">
+        <div class="nav-item active" data-tab="home">首页</div>
+        <div class="nav-item" data-tab="trade">闲置物品</div>
+        <div class="nav-item" data-tab="house">房屋租售</div>
+        <div class="nav-item" data-tab="notice">小区公告</div>
+        <div class="nav-item" data-tab="suggest">业主留言</div>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- 首页 -->
+    <div class="section active" id="sec-home">
+        <div class="notice-bar" onclick="switchTab('notice')">
+            <span class="tag">公告</span>
+            <span class="text" id="scrollNotice">锦岸花园便民服务平台上线啦！欢迎邻居们发布信息~</span>
+            <span class="arrow">›</span>
+        </div>
+        <div class="stats">
+            <div class="stat-item"><div class="stat-num" id="statTrade">3</div><div class="stat-label">闲置物品</div></div>
+            <div class="stat-item"><div class="stat-num" id="statHouse">3</div><div class="stat-label">房屋信息</div></div>
+            <div class="stat-item"><div class="stat-num" id="statNotice">2</div><div class="stat-label">小区公告</div></div>
+            <div class="stat-item"><div class="stat-num" id="statSuggest">2</div><div class="stat-label">业主留言</div></div>
+        </div>
+        <h3 style="font-size:16px;margin-bottom:10px;">📍 最新发布</h3>
+        <div id="latestList"></div>
+    </div>
+
+    <!-- 闲置物品 -->
+    <div class="section" id="sec-trade">
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterTrade('all')">全部</button>
+            <button class="filter-btn" onclick="filterTrade('出售')">出售</button>
+            <button class="filter-btn" onclick="filterTrade('免费赠送')">免费赠送</button>
+            <button class="filter-btn" onclick="filterTrade('求购')">求购</button>
+        </div>
+        <div id="tradeList"></div>
+    </div>
+
+    <!-- 房屋租售 -->
+    <div class="section" id="sec-house">
+        <div class="filter-bar">
+            <button class="filter-btn active" onclick="filterHouse('all')">全部</button>
+            <button class="filter-btn" onclick="filterHouse('出租')">出租</button>
+            <button class="filter-btn" onclick="filterHouse('出售')">出售</button>
+            <button class="filter-btn" onclick="filterHouse('求租')">求租</button>
+        </div>
+        <div id="houseList"></div>
+    </div>
+
+    <!-- 小区公告 -->
+    <div class="section" id="sec-notice">
+        <div id="noticeList"></div>
+    </div>
+
+    <!-- 业主留言 -->
+    <div class="section" id="sec-suggest">
+        <div id="suggestList"></div>
+    </div>
+
+</div>
+
+<!-- 发布按钮 -->
+<button class="fab" onclick="openModal()">＋</button>
+
+<!-- 发布弹窗 -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+    <div class="modal">
+        <h2>📝 发布信息</h2>
+        <div class="form-group">
+            <label>信息类型</label>
+            <select id="postType">
+                <option value="trade-sell">闲置物品 - 出售</option>
+                <option value="trade-free">闲置物品 - 免费赠送</option>
+                <option value="trade-buy">闲置物品 - 求购</option>
+                <option value="house-rent">房屋 - 出租</option>
+                <option value="house-sell">房屋 - 出售</option>
+                <option value="house-want">房屋 - 求租</option>
+                <option value="notice">小区公告</option>
+                <option value="suggest">业主留言</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>标题</label>
+            <input type="text" id="postTitle" placeholder="请输入标题">
+        </div>
+        <div class="form-group">
+            <label>详细描述</label>
+            <textarea id="postContent" placeholder="请详细描述内容、价格、规格等信息"></textarea>
+        </div>
+        <div class="form-group">
+            <label>联系方式</label>
+            <input type="text" id="postContact" placeholder="手机号/微信号（选填）">
+        </div>
+        <div class="btn-row">
+            <button class="btn btn-cancel" onclick="closeModal()">取消</button>
+            <button class="btn btn-primary" onclick="submitPost()">发布</button>
+        </div>
+    </div>
+</div>
+
+<div class="footer">锦岸花园便民服务平台 · 513000.net<br>本站信息由业主自行发布，请注意甄别</div>
+
+<script>
+// ======== 数据存储 ========
+const STORAGE_KEY = 'jinan_data';
+function getData() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : getDefaultData();
+}
+function saveData(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+function getDefaultData() {
+    return {
+        posts: [
+            { id: 1, type: 'trade-sell', title: '九成新儿童自行车', content: '孩子长大了用不上，买来不到半年，原价380，现价150元。可到楼下看货。', contact: '微信：zuo_neighbor', time: '2026-04-19 14:30' },
+            { id: 2, type: 'trade-free', title: '免费赠送婴儿推车', content: '家中小孩已不用，推车状态良好，轮子顺滑，遮阳篷完好。有需要的邻居直接联系我取。', contact: '138****5566', time: '2026-04-18 09:15' },
+            { id: 3, type: 'trade-buy', title: '求购一台微波炉', content: '想买一台二手微波炉，功能正常即可，价格面议。', contact: '微信：green_jinan', time: '2026-04-17 20:00' },
+            { id: 4, type: 'house-rent', title: '3室2厅出租 精装拎包入住', content: 'B栋8楼，120平，三房两厅，家具家电齐全。月租3800元，押二付一。看房提前联系。', contact: '139****8899', time: '2026-04-20 10:00' },
+            { id: 5, type: 'house-sell', title: '急售 2室1厅 学区房', content: 'C栋5楼，85平，南北通透，近学校。满五唯一，报价210万，诚心可小刀。', contact: '136****2233', time: '2026-04-19 16:45' },
+            { id: 6, type: 'house-want', title: '求租一室或两室', content: '在附近上班，想租一套一室或两室的房子，预算2000以内，最好带空调。', contact: '微信：li_work2026', time: '2026-04-18 11:30' },
+            { id: 7, type: 'notice', title: '关于小区停车管理的通知', content: '各位业主：为规范小区停车秩序，物业将于5月1日起实行车位登记制度。请各位业主于4月30日前到物业中心办理车位登记，逾期未登记者将按临停标准收费。详情请咨询物业前台。', contact: '物业服务中心', time: '2026-04-20 08:00' },
+            { id: 8, type: 'notice', title: '本周六小区义诊活动', content: '锦岸花园社区联合社康中心，将于4月25日（周六）上午9:00-12:00在小区广场举办免费义诊活动，提供量血压、测血糖、中医问诊等服务，欢迎各位业主参加！', contact: '社区服务中心', time: '2026-04-17 15:00' },
+            { id: 9, type: 'suggest', title: '建议增加儿童游乐设施', content: '小区里小孩子越来越多，但目前只有一个简单的滑梯，建议物业在B栋旁边的空地增加一些儿童游乐设施，比如秋千、跷跷板等，方便带娃的业主。', contact: 'A栋业主', time: '2026-04-19 21:00' },
+            { id: 10, type: 'suggest', title: '快递柜不够用了', content: '现在快递柜经常满，取件经常要排很久。建议增加快递柜数量或者引进其他快递代收服务。有同感的邻居顶一下！', contact: 'C栋业主', time: '2026-04-18 18:30' },
+        ]
+    };
+}
+
+let appData = getData();
+
+// ======== 日期显示 ========
+function showDate() {
+    const now = new Date();
+    const week = ['日','一','二','三','四','五','六'];
+    const str = now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日 周' + week[now.getDay()];
+    document.getElementById('headerDate').textContent = str;
+}
+showDate();
+
+// ======== 导航切换 ========
+function switchTab(tab) {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec-' + tab).classList.add('active');
+}
+document.querySelectorAll('.nav-item').forEach(n => {
+    n.addEventListener('click', () => switchTab(n.dataset.tab));
+});
+
+// ======== 渲染函数 ========
+function getTagClass(type) {
+    const map = { 'trade-sell':'tag-sale', 'trade-free':'tag-free', 'trade-buy':'tag-sale',
+                  'house-rent':'tag-rent', 'house-sell':'tag-sale', 'house-want':'tag-rent',
+                  'notice':'tag-notice', 'suggest':'tag-suggest' };
+    return map[type] || 'tag-notice';
+}
+function getTagText(type) {
+    const map = { 'trade-sell':'出售', 'trade-free':'免费赠送', 'trade-buy':'求购',
+                  'house-rent':'出租', 'house-sell':'出售', 'house-want':'求租',
+                  'notice':'公告', 'suggest':'留言' };
+    return map[type] || type;
+}
+function getCategory(type) {
+    if (type.startsWith('trade')) return 'trade';
+    if (type.startsWith('house')) return 'house';
+    return type;
+}
+
+function renderCard(post) {
+    return `<div class="card">
+        <div class="card-header">
+            <span class="card-title">${post.title}</span>
+            <span class="card-time">${post.time}</span>
+        </div>
+        <div class="card-body">${post.content}</div>
+        <div class="card-footer">
+            <span class="card-contact">📞 ${post.contact}</span>
+            <span class="card-tag ${getTagClass(post.type)}">${getTagText(post.type)}</span>
+        </div>
+    </div>`;
+}
+
+function renderEmpty() {
+    return `<div class="empty"><div class="empty-icon">📭</div><div class="empty-text">暂无信息，快来发布第一条吧！</div></div>`;
+}
+
+function renderAll() {
+    const posts = appData.posts;
+    const trade = posts.filter(p => getCategory(p.type) === 'trade');
+    const house = posts.filter(p => getCategory(p.type) === 'house');
+    const notice = posts.filter(p => p.type === 'notice');
+    const suggest = posts.filter(p => p.type === 'suggest');
+
+    document.getElementById('tradeList').innerHTML = trade.length ? trade.map(renderCard).join('') : renderEmpty();
+    document.getElementById('houseList').innerHTML = house.length ? house.map(renderCard).join('') : renderEmpty();
+    document.getElementById('noticeList').innerHTML = notice.length ? notice.map(renderCard).join('') : renderEmpty();
+    document.getElementById('suggestList').innerHTML = suggest.length ? suggest.map(renderCard).join('') : renderEmpty();
+
+    // 最新发布（取最新5条）
+    const latest = [...posts].sort((a,b) => b.time.localeCompare(a.time)).slice(0,5);
+    document.getElementById('latestList').innerHTML = latest.length ? latest.map(renderCard).join('') : renderEmpty();
+
+    // 统计
+    document.getElementById('statTrade').textContent = trade.length;
+    document.getElementById('statHouse').textContent = house.length;
+    document.getElementById('statNotice').textContent = notice.length;
+    document.getElementById('statSuggest').textContent = suggest.length;
+
+    // 滚动公告
+    const latestNotice = notice.sort((a,b) => b.time.localeCompare(a.time))[0];
+    if (latestNotice) {
+        document.getElementById('scrollNotice').textContent = latestNotice.title;
+    }
+}
+
+// ======== 筛选 ========
+let currentTradeFilter = 'all';
+let currentHouseFilter = 'all';
+
+function filterTrade(tag) {
+    currentTradeFilter = tag;
+    document.querySelectorAll('#sec-trade .filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const posts = appData.posts.filter(p => getCategory(p.type) === 'trade');
+    const filtered = tag === 'all' ? posts : posts.filter(p => getTagText(p.type) === tag);
+    document.getElementById('tradeList').innerHTML = filtered.length ? filtered.map(renderCard).join('') : renderEmpty();
+}
+
+function filterHouse(tag) {
+    currentHouseFilter = tag;
+    document.querySelectorAll('#sec-house .filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    const posts = appData.posts.filter(p => getCategory(p.type) === 'house');
+    const filtered = tag === 'all' ? posts : posts.filter(p => getTagText(p.type) === tag);
+    document.getElementById('houseList').innerHTML = filtered.length ? filtered.map(renderCard).join('') : renderEmpty();
+}
+
+// ======== 发布 ========
+function openModal() {
+    document.getElementById('modalOverlay').classList.add('active');
+}
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+}
+function closeModalOutside(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function submitPost() {
+    const type = document.getElementById('postType').value;
+    const title = document.getElementById('postTitle').value.trim();
+    const content = document.getElementById('postContent').value.trim();
+    const contact = document.getElementById('postContact').value.trim() || '未留联系方式';
+
+    if (!title) { alert('请填写标题'); return; }
+    if (!content) { alert('请填写详细描述'); return; }
+
+    const now = new Date();
+    const time = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+
+    appData.posts.push({ id: Date.now(), type, title, content, contact, time });
+    saveData(appData);
+    renderAll();
+    closeModal();
+
+    // 清空表单
+    document.getElementById('postTitle').value = '';
+    document.getElementById('postContent').value = '';
+    document.getElementById('postContact').value = '';
+
+    // 跳转到对应板块
+    const cat = getCategory(type);
+    if (cat === 'trade') switchTab('trade');
+    else if (cat === 'house') switchTab('house');
+    else switchTab(type);
+
+    alert('发布成功！');
+}
+
+// ======== 初始渲染 ========
+renderAll();
+</script>
+
+</body>
+</html>
