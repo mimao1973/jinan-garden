@@ -1184,6 +1184,14 @@ function filterHouse(tag) {
 
 function openModal() {
 
+    // 非管理员隐藏公告选项
+    var noticeOpt = document.querySelector('#postType option[value="notice"]');
+    if (noticeOpt) {
+        noticeOpt.style.display = isAdmin ? '' : 'none';
+        if (!isAdmin && document.getElementById('postType').value === 'notice') {
+            document.getElementById('postType').selectedIndex = 0;
+        }
+    }
     document.getElementById('modalOverlay').classList.add('active');
 
 }
@@ -1205,6 +1213,12 @@ function closeModalOutside(e) {
 async function submitPost() {
 
     var type = document.getElementById('postType').value;
+
+    // 公告仅管理员可发布
+    if (type === 'notice' && !isAdmin) {
+        alert('小区公告仅管理员可发布，如需发布公告请联系管理员');
+        return;
+    }
 
     var title = document.getElementById('postTitle').value.trim();
 
