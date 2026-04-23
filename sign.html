@@ -393,6 +393,252 @@
             pointer-events: none;
         }
         .toast.show { opacity: 1; }
+
+        /* 管理员入口 - 隐藏点击区域 */
+        .admin-trigger {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 50;
+        }
+
+        /* 管理员登录模态框 */
+        .admin-login-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 400;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-login-modal.active { display: flex; }
+        .admin-login-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            width: 320px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .admin-login-box h3 {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .admin-login-box input {
+            width: 100%;
+            height: 44px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            padding: 0 14px;
+            font-size: 15px;
+            margin-bottom: 16px;
+            outline: none;
+        }
+        .admin-login-box input:focus { border-color: #667eea; }
+        .admin-login-box .btn-row {
+            display: flex;
+            gap: 10px;
+        }
+        .admin-login-box button {
+            flex: 1;
+            height: 42px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .btn-cancel { background: #f0f0f0; color: #666; }
+        .btn-confirm { background: linear-gradient(135deg, #667eea, #764ba2); color: #fff; }
+
+        /* 管理员页面 */
+        .admin-page {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #f5f6fa;
+            z-index: 300;
+            flex-direction: column;
+        }
+        .admin-page.active { display: flex; }
+        .admin-header {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+        .admin-header .back-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .admin-header h2 {
+            font-size: 17px;
+            font-weight: 500;
+            flex: 1;
+        }
+        .admin-toolbar {
+            background: #fff;
+            padding: 12px 16px;
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .admin-toolbar button {
+            flex: 1;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .btn-export {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: #fff;
+        }
+        .btn-refresh {
+            background: #f0f0f0;
+            color: #666;
+        }
+        .admin-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+        .admin-table-wrapper {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .admin-table thead th {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+            padding: 12px 8px;
+            font-weight: 500;
+            font-size: 13px;
+            text-align: center;
+        }
+        .admin-table tbody td {
+            padding: 10px 8px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+        .admin-table tbody tr:last-child td { border-bottom: none; }
+        .admin-table .col-select { width: 8%; }
+        .admin-table .col-idx { width: 8%; color: #999; }
+        .admin-table .col-room { width: 20%; font-weight: 500; }
+        .admin-table .col-time { width: 18%; font-size: 11px; color: #888; }
+        .admin-table .col-sig { width: 30%; }
+        .admin-table .col-action { width: 16%; }
+        .admin-sig-img {
+            height: 32px;
+            max-width: 90px;
+            object-fit: contain;
+        }
+        .btn-delete {
+            background: #fff;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .btn-delete:hover { background: #e74c3c; color: #fff; }
+        .btn-delete:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .admin-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .admin-empty {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        .admin-footer {
+            background: #fff;
+            padding: 12px 16px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+        .admin-footer button {
+            flex: 1;
+            height: 42px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .btn-select-all {
+            background: #f0f0f0;
+            color: #666;
+        }
+        .btn-batch-delete {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: #fff;
+        }
+        .btn-batch-delete:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Loading遮罩 */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.8);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .loading-overlay.active { display: flex; }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e8e8e8;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .loading-text { font-size: 14px; color: #666; }
     </style>
 </head>
 <body>
@@ -421,7 +667,7 @@
         </div>
     </div>
 
-    <div class="section-title">签名记录</div>
+    <div class="section-title" style="cursor:pointer" onclick="loadSignatures(true)">签名记录 <span style="font-size:11px;color:rgba(255,255,255,0.6);font-weight:normal;margin-left:4px">点击刷新</span></div>
 
     <div class="table-wrapper">
         <table class="sig-table">
@@ -484,6 +730,62 @@
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
+
+<!-- 管理员入口 -->
+<div class="admin-trigger" id="adminTrigger" onclick="handleAdminTrigger()"></div>
+
+<!-- 管理员登录模态框 -->
+<div class="admin-login-modal" id="adminLoginModal">
+    <div class="admin-login-box">
+        <h3>🔐 管理员登录</h3>
+        <input type="password" id="adminPassword" placeholder="请输入管理员密码" onkeydown="if(event.key==='Enter')doAdminLogin()">
+        <div class="btn-row">
+            <button class="btn-cancel" onclick="closeAdminLogin()">取消</button>
+            <button class="btn-confirm" onclick="doAdminLogin()">确认</button>
+        </div>
+    </div>
+</div>
+
+<!-- 管理员页面 -->
+<div class="admin-page" id="adminPage">
+    <div class="admin-header">
+        <button class="back-btn" onclick="closeAdminPage()">←</button>
+        <h2>管理签名记录</h2>
+    </div>
+    <div class="admin-toolbar">
+        <button class="btn-refresh" onclick="refreshAdminList()">🔄 刷新</button>
+        <button class="btn-export" onclick="exportToExcel()">📥 导出Excel</button>
+    </div>
+    <div class="admin-content">
+        <div class="admin-table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" class="admin-checkbox" id="selectAllCheck" onchange="toggleSelectAll()"></th>
+                        <th>序号</th>
+                        <th>房号</th>
+                        <th>签名时间</th>
+                        <th>签名</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                    <tr class="admin-empty"><td colspan="6">加载中...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="admin-footer">
+        <button class="btn-select-all" onclick="selectAll()">全选</button>
+        <button class="btn-batch-delete" id="batchDeleteBtn" onclick="batchDelete()" disabled>🗑️ 批量删除</button>
+    </div>
+</div>
+
+<!-- Loading遮罩 -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">处理中...</div>
+</div>
 
 <script>
     // ====== 配置 ======
@@ -609,10 +911,10 @@
         document.getElementById('inputRoom').value = '';
         document.getElementById('inputPhone').value = '';
         clearCanvas();
-        // 刷新数据
-        loadSignatures();
         document.getElementById('signPage').classList.remove('active');
         document.body.style.overflow = '';
+        // 延迟1秒后强制刷新数据（绕过GitHub缓存）
+        setTimeout(() => loadSignatures(true), 1000);
     }
 
     // ====== Toast ======
@@ -696,16 +998,18 @@
     }
 
     // ====== 加载签名数据 ======
-    async function loadSignatures() {
+    // forceRefresh: true时强制绕过缓存（用于提交后立即刷新）
+    async function loadSignatures(forceRefresh) {
         try {
+            const cacheBuster = forceRefresh ? '&_=' + Date.now() : '';
             // 先尝试带label查询
-            let url = API_BASE + '/repos/' + REPO + '/issues?state=open&labels=' + LABEL + '&per_page=100&sort=created&direction=asc';
+            let url = API_BASE + '/repos/' + REPO + '/issues?state=open&labels=' + LABEL + '&per_page=100&sort=created&direction=asc' + cacheBuster;
             let resp = await fetch(url);
             let data = await resp.json();
 
             // 如果带label查不到（label不存在），用关键词搜索
             if (!Array.isArray(data) || data.length === 0 || (data.message && data.message.includes('Not Found'))) {
-                let allResp = await fetch(API_BASE + '/repos/' + REPO + '/issues?state=open&per_page=100&sort=created&direction=asc');
+                let allResp = await fetch(API_BASE + '/repos/' + REPO + '/issues?state=open&per_page=100&sort=created&direction=asc' + cacheBuster);
                 let allData = await allResp.json();
                 data = allData.filter(d => d.title.startsWith('签名-'));
             }
@@ -761,6 +1065,316 @@
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    }
+
+    // ====== 管理员功能 ======
+    let adminClickCount = 0;
+    let adminClickTimer = null;
+    const ADMIN_PASSWORD = 'admin2024'; // 管理员密码，可修改
+
+    // 管理员入口 - 连续点击标题5次
+    function handleAdminTrigger() {
+        adminClickCount++;
+        if (adminClickTimer) clearTimeout(adminClickTimer);
+        adminClickTimer = setTimeout(() => { adminClickCount = 0; }, 2000);
+
+        if (adminClickCount >= 5) {
+            adminClickCount = 0;
+            document.getElementById('adminLoginModal').classList.add('active');
+            document.getElementById('adminPassword').focus();
+        }
+    }
+
+    function closeAdminLogin() {
+        document.getElementById('adminLoginModal').classList.remove('active');
+        document.getElementById('adminPassword').value = '';
+    }
+
+    function doAdminLogin() {
+        const pwd = document.getElementById('adminPassword').value;
+        if (pwd === ADMIN_PASSWORD) {
+            closeAdminLogin();
+            openAdminPage();
+        } else {
+            showToast('密码错误');
+            document.getElementById('adminPassword').value = '';
+        }
+    }
+
+    // 管理员页面
+    function openAdminPage() {
+        document.getElementById('adminPage').classList.add('active');
+        loadAdminSignatures();
+    }
+
+    function closeAdminPage() {
+        document.getElementById('adminPage').classList.remove('active');
+        selectedIds = [];
+        updateBatchButton();
+    }
+
+    // 管理员模式下的签名数据（含issue编号）
+    let adminSignatures = [];
+    let selectedIds = [];
+
+    async function loadAdminSignatures() {
+        try {
+            showLoading('加载签名数据...');
+
+            const cacheBuster = '&_=' + Date.now();
+            let url = API_BASE + '/repos/' + REPO + '/issues?state=open&labels=' + LABEL + '&per_page=100&sort=created&direction=asc' + cacheBuster;
+            let resp = await fetch(url);
+            let data = await resp.json();
+
+            if (!Array.isArray(data) || data.length === 0 || (data.message && data.message.includes('Not Found'))) {
+                let allResp = await fetch(API_BASE + '/repos/' + REPO + '/issues?state=open&per_page=100&sort=created&direction=asc' + cacheBuster);
+                let allData = await allResp.json();
+                data = allData.filter(d => d.title.startsWith('签名-'));
+            }
+
+            adminSignatures = [];
+            data.forEach(item => {
+                try {
+                    const info = JSON.parse(item.body);
+                    if (info.room && info.signature) {
+                        adminSignatures.push({
+                            id: item.number,
+                            issueNumber: item.number,
+                            room: info.room,
+                            phone: info.phone || '',
+                            signature: info.signature,
+                            time: item.created_at
+                        });
+                    }
+                } catch(e) {}
+            });
+
+            renderAdminTable();
+        } catch(err) {
+            console.error('加载失败:', err);
+            document.getElementById('adminTableBody').innerHTML = '<tr class="admin-empty"><td colspan="6">加载失败，请重试</td></tr>';
+        }
+
+        hideLoading();
+    }
+
+    function renderAdminTable() {
+        const tbody = document.getElementById('adminTableBody');
+
+        if (adminSignatures.length === 0) {
+            tbody.innerHTML = '<tr class="admin-empty"><td colspan="6">暂无签名记录</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = adminSignatures.map((s, i) => `
+            <tr>
+                <td><input type="checkbox" class="admin-checkbox" value="${s.issueNumber}" onchange="updateBatchButton()"></td>
+                <td>${i + 1}</td>
+                <td>${escapeHtml(s.room)}</td>
+                <td>${formatDateTime(s.time)}</td>
+                <td><img src="${s.signature}" class="admin-sig-img" alt="签名"></td>
+                <td>
+                    <button class="btn-delete" onclick="deleteSignature(${s.issueNumber}, '${escapeHtml(s.room)}')" id="delBtn_${s.issueNumber}">删除</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function formatDateTime(isoString) {
+        if (!isoString) return '-';
+        const d = new Date(isoString);
+        return d.getFullYear() + '-' +
+               String(d.getMonth() + 1).padStart(2, '0') + '-' +
+               String(d.getDate()).padStart(2, '0') + ' ' +
+               String(d.getHours()).padStart(2, '0') + ':' +
+               String(d.getMinutes()).padStart(2, '0');
+    }
+
+    // 刷新列表
+    function refreshAdminList() {
+        selectedIds = [];
+        document.getElementById('selectAllCheck').checked = false;
+        loadAdminSignatures();
+    }
+
+    // 全选/取消全选
+    function toggleSelectAll() {
+        const checked = document.getElementById('selectAllCheck').checked;
+        document.querySelectorAll('#adminTableBody input[type="checkbox"]').forEach(cb => {
+            cb.checked = checked;
+        });
+        updateBatchButton();
+    }
+
+    function selectAll() {
+        const allChecked = adminSignatures.length > 0 &&
+            document.querySelectorAll('#adminTableBody input[type="checkbox"]:not(#selectAllCheck)').length ===
+            document.querySelectorAll('#adminTableBody input[type="checkbox"]:checked:not(#selectAllCheck)').length;
+
+        document.querySelectorAll('#adminTableBody input[type="checkbox"]').forEach(cb => {
+            cb.checked = !allChecked;
+        });
+        updateBatchButton();
+    }
+
+    function updateBatchButton() {
+        const checked = document.querySelectorAll('#adminTableBody input[type="checkbox"]:checked:not(#selectAllCheck)');
+        const btn = document.getElementById('batchDeleteBtn');
+        btn.disabled = checked.length === 0;
+        btn.textContent = checked.length > 0 ? `🗑️ 批量删除 (${checked.length})` : '🗑️ 批量删除';
+    }
+
+    // 删除单个签名
+    async function deleteSignature(issueNumber, room) {
+        if (!confirm(`确定要删除「${room}」的签名记录吗？\n删除后可在GitHub后台恢复。`)) return;
+
+        const btn = document.getElementById('delBtn_' + issueNumber);
+        btn.disabled = true;
+        btn.textContent = '删除中...';
+
+        try {
+            const resp = await fetch(API_BASE + '/repos/' + REPO + '/issues/' + issueNumber, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': 'token ' + TOKEN,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ state: 'closed' })
+            });
+
+            if (resp.ok) {
+                showToast('删除成功');
+                // 从列表移除
+                adminSignatures = adminSignatures.filter(s => s.issueNumber !== issueNumber);
+                renderAdminTable();
+                // 同步更新主页数据
+                loadSignatures();
+            } else {
+                throw new Error('删除失败');
+            }
+        } catch(err) {
+            showToast('删除失败，请重试');
+            console.error(err);
+            btn.disabled = false;
+            btn.textContent = '删除';
+        }
+    }
+
+    // 批量删除
+    async function batchDelete() {
+        const checked = document.querySelectorAll('#adminTableBody input[type="checkbox"]:checked:not(#selectAllCheck)');
+        if (checked.length === 0) return;
+
+        const count = checked.length;
+        if (!confirm(`确定要删除选中的 ${count} 条签名记录吗？`)) return;
+
+        showLoading(`正在删除 ${count} 条记录...`);
+
+        let successCount = 0;
+        let failCount = 0;
+
+        for (const cb of checked) {
+            const issueNumber = parseInt(cb.value);
+            try {
+                const resp = await fetch(API_BASE + '/repos/' + REPO + '/issues/' + issueNumber, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': 'token ' + TOKEN,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ state: 'closed' })
+                });
+
+                if (resp.ok) {
+                    successCount++;
+                    adminSignatures = adminSignatures.filter(s => s.issueNumber !== issueNumber);
+                } else {
+                    failCount++;
+                }
+            } catch(err) {
+                failCount++;
+            }
+        }
+
+        hideLoading();
+
+        if (successCount > 0) {
+            showToast(`成功删除 ${successCount} 条`);
+            renderAdminTable();
+            loadSignatures();
+        }
+        if (failCount > 0) {
+            showToast(`有 ${failCount} 条删除失败`);
+        }
+    }
+
+    // 导出Excel
+    async function exportToExcel() {
+        if (adminSignatures.length === 0) {
+            showToast('没有可导出的数据');
+            return;
+        }
+
+        showLoading('正在准备导出...');
+
+        try {
+            // 动态加载SheetJS
+            if (typeof XLSX === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+                document.head.appendChild(script);
+                await new Promise((resolve, reject) => {
+                    script.onload = resolve;
+                    script.onerror = reject;
+                });
+            }
+
+            // 准备数据
+            const data = adminSignatures.map((s, i) => ({
+                '序号': i + 1,
+                '房号': s.room,
+                '手机尾号': s.phone,
+                '签名时间': formatDateTime(s.time)
+            }));
+
+            // 创建工作表
+            const ws = XLSX.utils.json_to_sheet(data);
+
+            // 设置列宽
+            ws['!cols'] = [
+                { wch: 6 },
+                { wch: 15 },
+                { wch: 12 },
+                { wch: 20 }
+            ];
+
+            // 创建工作簿
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, '签名记录');
+
+            // 下载文件
+            const fileName = '锦岸花园签名表_' + new Date().toISOString().split('T')[0] + '.xlsx';
+            XLSX.writeFile(wb, fileName);
+
+            showToast('导出成功');
+        } catch(err) {
+            console.error('导出失败:', err);
+            showToast('导出失败，请重试');
+        }
+
+        hideLoading();
+    }
+
+    // Loading控制
+    function showLoading(text) {
+        document.getElementById('loadingText').textContent = text || '处理中...';
+        document.getElementById('loadingOverlay').classList.add('active');
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingOverlay').classList.remove('active');
     }
 </script>
 
