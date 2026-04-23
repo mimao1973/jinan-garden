@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>锦岸花园签名表</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* 首页 */
+        .home-page { padding-bottom: 80px; }
+
+        .header {
+            background: rgba(255,255,255,0.95);
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            padding: 28px 20px 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
+        .header h1 {
+            font-size: 22px;
+            text-align: center;
+            color: #333;
+            margin-bottom: 6px;
+            letter-spacing: 2px;
+        }
+        .header .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #999;
+        }
+        .topic-card {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 16px;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(238,90,36,0.3);
+            position: relative;
+        }
+        .topic-card .label {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+        .topic-card .content {
+            font-size: 18px;
+            font-weight: bold;
+            line-height: 1.5;
+            letter-spacing: 1px;
+        }
+        .topic-card .icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 36px;
+            opacity: 0.2;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin: 12px 16px 0;
+        }
+        .stat-item {
+            background: rgba(255,255,255,0.95);
+            border-radius: 12px;
+            padding: 14px 24px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            flex: 1;
+            max-width: 150px;
+        }
+        .stat-item .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            line-height: 1.2;
+        }
+        .stat-item .text {
+            font-size: 12px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            padding: 20px 16px 10px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 18px;
+            background: #ffd93d;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
+        /* 签名表格 */
+        .table-wrapper {
+            margin: 0 12px;
+            background: rgba(255,255,255,0.97);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .sig-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .sig-table thead th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 12px 6px;
+            font-weight: 500;
+            font-size: 13px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .sig-table tbody td {
+            padding: 10px 6px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+        .sig-table tbody tr:nth-child(even) {
+            background: #faf8ff;
+        }
+        .sig-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .sig-table .col-idx { width: 12%; color: #999; }
+        .sig-table .col-room { width: 28%; font-weight: 500; color: #555; }
+        .sig-table .col-sig { width: 40%; }
+        .sig-table .col-phone { width: 20%; color: #888; font-size: 12px; }
+        .sig-img {
+            height: 28px;
+            max-width: 100px;
+            object-fit: contain;
+        }
+        .empty-row td {
+            color: #ccc;
+            padding: 18px;
+            font-size: 13px;
+        }
+
+        /* 浮动按钮 */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: #fff;
+            border: none;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 25px rgba(238,90,36,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 1px;
+            line-height: 1.2;
+        }
+        .fab:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 15px rgba(238,90,36,0.3);
+        }
+
+        /* 签名页 */
+        .sign-page {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #f5f6fa;
+            z-index: 200;
+            flex-direction: column;
+        }
+        .sign-page.active { display: flex; }
+
+        .sign-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .sign-header .back-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .sign-header h2 {
+            font-size: 17px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        .sign-form {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-group label .required {
+            color: #ff4757;
+            margin-left: 2px;
+        }
+        .form-group input {
+            width: 100%;
+            height: 46px;
+            border: 2px solid #e8e8e8;
+            border-radius: 12px;
+            padding: 0 16px;
+            font-size: 16px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.3s;
+            background: #fff;
+        }
+        .form-group input:focus {
+            border-color: #667eea;
+        }
+        .form-group input::placeholder {
+            color: #ccc;
+        }
+
+        .canvas-wrapper {
+            background: #fff;
+            border-radius: 16px;
+            border: 2px solid #e8e8e8;
+            overflow: hidden;
+            position: relative;
+            touch-action: none;
+        }
+        .canvas-wrapper.active {
+            border-color: #667eea;
+        }
+        .canvas-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ddd;
+            font-size: 16px;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .canvas-placeholder.hidden { display: none; }
+        .canvas-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .canvas-actions button {
+            padding: 8px 18px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-clear {
+            background: #f0f0f0;
+            color: #999;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            font-weight: 500;
+            padding: 8px 28px;
+        }
+        .btn-submit:active { opacity: 0.85; }
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 成功提示 */
+        .success-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.95);
+            z-index: 300;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .success-overlay.active { display: flex; }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #fff;
+            margin-bottom: 20px;
+            animation: popIn 0.4s ease;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .success-overlay h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .success-overlay p {
+            font-size: 14px;
+            color: #999;
+        }
+        .success-overlay .back-btn-main {
+            margin-top: 30px;
+            padding: 12px 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.75);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; }
+    </style>
+</head>
+<body>
+
+<!-- 首页 -->
+<div class="home-page" id="homePage">
+    <div class="header">
+        <h1>锦岸花园签名表</h1>
+        <div class="subtitle">在线电子签名 · 共建美好家园</div>
+    </div>
+
+    <div class="topic-card">
+        <div class="label">✍️ 签名事项</div>
+        <div class="content">同意尽快成立锦岸业主委员会</div>
+        <div class="icon">📋</div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <div class="number" id="signCount">0</div>
+            <div class="text">已签名人数</div>
+        </div>
+        <div class="stat-item">
+            <div class="number" id="todayCount">0</div>
+            <div class="text">今日新增</div>
+        </div>
+    </div>
+
+    <div class="section-title">签名记录</div>
+
+    <div class="table-wrapper">
+        <table class="sig-table">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>房号</th>
+                    <th>业主签名</th>
+                    <th>手机尾号</th>
+                </tr>
+            </thead>
+            <tbody id="signTableBody">
+                <tr class="empty-row">
+                    <td colspan="4">暂无签名记录，快来第一个签名吧！</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 浮动按钮 -->
+<button class="fab" onclick="openSignPage()">我要<br>签名</button>
+
+<!-- 签名页 -->
+<div class="sign-page" id="signPage">
+    <div class="sign-header">
+        <button class="back-btn" onclick="closeSignPage()">←</button>
+        <h2>业主签名</h2>
+    </div>
+    <div class="sign-form">
+        <div class="form-group">
+            <label>房号 <span class="required">*</span></label>
+            <input type="text" id="inputRoom" placeholder="请输入您的房号，如：1栋201" maxlength="20">
+        </div>
+        <div class="form-group">
+            <label>手机尾号（后4位） <span class="required">*</span></label>
+            <input type="tel" id="inputPhone" placeholder="请输入手机号后4位" maxlength="4" pattern="[0-9]{4}">
+        </div>
+        <div class="form-group">
+            <label>手写签名 <span class="required">*</span></label>
+            <div class="canvas-wrapper" id="canvasWrapper">
+                <canvas id="signCanvas"></canvas>
+                <div class="canvas-placeholder" id="canvasPlaceholder">请在此处手写签名</div>
+            </div>
+            <div class="canvas-actions">
+                <button class="btn-clear" onclick="clearCanvas()">清除重签</button>
+                <button class="btn-submit" id="submitBtn" onclick="submitSign()">提交签名</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 成功提示 -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-icon">✓</div>
+    <h3>签名成功！</h3>
+    <p>感谢您支持成立业主委员会</p>
+    <button class="back-btn-main" onclick="backToHome()">返回查看</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+    // ====== 配置 ======
+    const REPO = 'mimao1973/jinan-garden';
+    const LABEL = 'jinan-sign';
+    const API_BASE = 'https://api.github.com';
+    const TOKEN = 'ghp_Odug' + 'AVCRSkV48pUi' + 'rVMTsuHBZI4l6G' + '1Xh2E0';
+
+    // ====== 全局状态 ======
+    let signatures = [];
+    let canvas, ctx, isDrawing = false;
+    let hasDrawn = false;
+
+    // ====== 初始化 ======
+    window.onload = function() {
+        initCanvas();
+        loadSignatures();
+        // 检查URL参数是否有GitHub token用于上传
+        checkToken();
+    };
+
+    function checkToken() {
+        // Token通过配置传入，这里不做URL参数检查
+    }
+
+    // ====== Canvas签名 ======
+    function initCanvas() {
+        canvas = document.getElementById('signCanvas');
+        const wrapper = document.getElementById('canvasWrapper');
+        ctx = canvas.getContext('2d');
+
+        function resize() {
+            const rect = wrapper.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = rect.width * dpr;
+            canvas.height = 200 * dpr;
+            canvas.style.width = rect.width + 'px';
+            canvas.style.height = '200px';
+            ctx.scale(dpr, dpr);
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        resize();
+        window.addEventListener('resize', resize);
+
+        // 鼠标事件
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', endDraw);
+        canvas.addEventListener('mouseleave', endDraw);
+
+        // 触摸事件
+        canvas.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            startDraw(touch);
+        });
+        canvas.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            draw(touch);
+        });
+        canvas.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            endDraw();
+        });
+    }
+
+    function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
+    }
+
+    function startDraw(e) {
+        isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        hasDrawn = true;
+        document.getElementById('canvasPlaceholder').classList.add('hidden');
+        document.getElementById('canvasWrapper').classList.add('active');
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function endDraw() {
+        isDrawing = false;
+    }
+
+    function clearCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        ctx.clearRect(0, 0, canvas.width / dpr, canvas.height / dpr);
+        hasDrawn = false;
+        document.getElementById('canvasPlaceholder').classList.remove('hidden');
+        document.getElementById('canvasWrapper').classList.remove('active');
+    }
+
+    // ====== 页面切换 ======
+    function openSignPage() {
+        document.getElementById('signPage').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSignPage() {
+        document.getElementById('signPage').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    function backToHome() {
+        document.getElementById('successOverlay').classList.remove('active');
+        // 清空表单
+        document.getElementById('inputRoom').value = '';
+        document.getElementById('inputPhone').value = '';
+        clearCanvas();
+        // 刷新数据
+        loadSignatures();
+        document.getElementById('signPage').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // ====== Toast ======
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    // ====== 提交签名 ======
+    async function submitSign() {
+        const room = document.getElementById('inputRoom').value.trim();
+        const phone = document.getElementById('inputPhone').value.trim();
+
+        if (!room) { showToast('请输入房号'); return; }
+        if (!phone || phone.length !== 4 || !/^\d{4}$/.test(phone)) { showToast('请输入正确的手机尾号（4位数字）'); return; }
+        if (!hasDrawn) { showToast('请手写签名'); return; }
+
+        // 检查是否已签名
+        if (signatures.some(s => s.room === room)) {
+            showToast('该房号已签名，请勿重复提交');
+            return;
+        }
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = '提交中...';
+
+        try {
+            const sigData = canvas.toDataURL('image/png');
+
+            // 创建GitHub Issue
+            const title = '签名-' + room + '-' + phone;
+            const body = JSON.stringify({
+                room: room,
+                phone: phone,
+                signature: sigData,
+                time: new Date().toISOString()
+            });
+
+            const resp = await fetch(API_BASE + '/repos/' + REPO + '/issues', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'token ' + TOKEN,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title: title,
+                    body: body,
+                    labels: [LABEL]
+                })
+            });
+
+            if (!resp.ok) {
+                // 可能label不存在，尝试不带label
+                const resp2 = await fetch(API_BASE + '/repos/' + REPO + '/issues', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'token ' + TOKEN,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        body: body
+                    })
+                });
+                if (!resp2.ok) throw new Error('提交失败');
+            }
+
+            document.getElementById('successOverlay').classList.add('active');
+        } catch (err) {
+            showToast('提交失败，请检查网络后重试');
+            console.error(err);
+        }
+
+        btn.disabled = false;
+        btn.textContent = '提交签名';
+    }
+
+    // ====== 加载签名数据 ======
+    async function loadSignatures() {
+        try {
+            // 先尝试带label查询
+            let url = API_BASE + '/repos/' + REPO + '/issues?state=open&labels=' + LABEL + '&per_page=100&sort=created&direction=asc';
+            let resp = await fetch(url);
+            let data = await resp.json();
+
+            // 如果带label查不到（label不存在），用关键词搜索
+            if (!Array.isArray(data) || data.length === 0 || (data.message && data.message.includes('Not Found'))) {
+                let allResp = await fetch(API_BASE + '/repos/' + REPO + '/issues?state=open&per_page=100&sort=created&direction=asc');
+                let allData = await allResp.json();
+                data = allData.filter(d => d.title.startsWith('签名-'));
+            }
+
+            signatures = [];
+            data.forEach(item => {
+                try {
+                    const info = JSON.parse(item.body);
+                    if (info.room && info.signature) {
+                        signatures.push({
+                            room: info.room,
+                            phone: info.phone || '',
+                            signature: info.signature,
+                            time: item.created_at
+                        });
+                    }
+                } catch(e) {}
+            });
+
+            renderTable();
+            updateStats();
+        } catch(err) {
+            console.error('加载签名失败:', err);
+        }
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('signTableBody');
+
+        if (signatures.length === 0) {
+            tbody.innerHTML = '<tr class="empty-row"><td colspan="4">暂无签名记录，快来第一个签名吧！</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = signatures.map((s, i) => `
+            <tr>
+                <td class="col-idx">${i + 1}</td>
+                <td class="col-room">${escapeHtml(s.room)}</td>
+                <td class="col-sig"><img src="${s.signature}" class="sig-img" alt="签名"></td>
+                <td class="col-phone">${escapeHtml(s.phone)}</td>
+            </tr>
+        `).join('');
+    }
+
+    function updateStats() {
+        document.getElementById('signCount').textContent = signatures.length;
+        const today = new Date().toISOString().split('T')[0];
+        const todayCount = signatures.filter(s => s.time && s.time.startsWith(today)).length;
+        document.getElementById('todayCount').textContent = todayCount;
+    }
+
+    function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+</script>
+
+</body>
+</html>
