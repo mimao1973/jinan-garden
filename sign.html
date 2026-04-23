@@ -686,6 +686,11 @@
             </tbody>
         </table>
     </div>
+
+    <!-- 管理入口 -->
+    <div style="text-align:center;padding:16px 0 0;">
+        <span onclick="handleAdminTrigger()" style="font-size:11px;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;">管理入口</span>
+    </div>
 </div>
 
 <!-- 浮动按钮 -->
@@ -730,9 +735,6 @@
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
-
-<!-- 管理员入口 -->
-<div class="admin-trigger" id="adminTrigger" onclick="handleAdminTrigger()"></div>
 
 <!-- 管理员登录模态框 -->
 <div class="admin-login-modal" id="adminLoginModal">
@@ -1068,21 +1070,12 @@
     }
 
     // ====== 管理员功能 ======
-    let adminClickCount = 0;
-    let adminClickTimer = null;
     const ADMIN_PASSWORD = 'admin2024'; // 管理员密码，可修改
 
-    // 管理员入口 - 连续点击标题5次
+    // 管理员入口 - 直接打开登录框（由管理入口链接调用）
     function handleAdminTrigger() {
-        adminClickCount++;
-        if (adminClickTimer) clearTimeout(adminClickTimer);
-        adminClickTimer = setTimeout(() => { adminClickCount = 0; }, 2000);
-
-        if (adminClickCount >= 5) {
-            adminClickCount = 0;
-            document.getElementById('adminLoginModal').classList.add('active');
-            document.getElementById('adminPassword').focus();
-        }
+        document.getElementById('adminLoginModal').classList.add('active');
+        document.getElementById('adminPassword').focus();
     }
 
     function closeAdminLogin() {
