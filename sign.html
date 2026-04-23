@@ -756,7 +756,7 @@
     </div>
     <div class="admin-toolbar">
         <button class="btn-refresh" onclick="refreshAdminList()">🔄 刷新</button>
-        <button class="btn-export" onclick="exportToExcel()">📥 导出Excel</button>
+        <button class="btn-export" onclick="exportToExcel()">📥 导出签名表</button>
     </div>
     <div class="admin-content">
         <div class="admin-table-wrapper">
@@ -1313,11 +1313,23 @@
         showLoading('正在准备导出...');
 
         try {
-            // 生成HTML表格（带签名图片），Excel和WPS都能打开
-            let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">';
-            html += '<head><meta charset="utf-8">';
-            html += '<style>td{border:1px solid #000;padding:6px 8px;text-align:center;vertical-align:middle;font-size:12px;font-family:"微软雅黑",sans-serif;} th{border:1px solid #000;padding:8px;background:#f0f0f0;font-weight:bold;font-size:13px;text-align:center;}</style>';
-            html += '</head><body>';
+            // 导出为HTML文件（带签名图片），浏览器打开即可查看、打印或另存为PDF
+            let html = '<!DOCTYPE html><html><head><meta charset="utf-8">';
+            html += '<title>锦岸花园签名表</title>';
+            html += '<style>';
+            html += 'body{font-family:"微软雅黑","PingFang SC",sans-serif;padding:20px;color:#333;}';
+            html += 'h1{text-align:center;font-size:22px;margin-bottom:4px;}';
+            html += '.subtitle{text-align:center;font-size:13px;color:#888;margin-bottom:20px;}';
+            html += 'table{width:100%;border-collapse:collapse;margin:0 auto;}';
+            html += 'th{border:1px solid #333;padding:10px 8px;background:#f5f5f5;font-size:14px;font-weight:bold;text-align:center;}';
+            html += 'td{border:1px solid #333;padding:8px;text-align:center;vertical-align:middle;font-size:13px;}';
+            html += 'tr:nth-child(even){background:#fafafa;}';
+            html += '.sig-img{height:36px;max-width:120px;}';
+            html += '.footer{text-align:center;margin-top:16px;font-size:12px;color:#aaa;}';
+            html += '@media print{body{padding:10px;}.no-print{display:none;}}';
+            html += '</style></head><body>';
+            html += '<h1>锦岸花园签名表</h1>';
+            html += '<div class="subtitle">签名事项：同意尽快成立锦岸业主委员会</div>';
             html += '<table>';
             html += '<tr><th>序号</th><th>房号</th><th>业主签名</th><th>手机尾号</th><th>签名时间</th></tr>';
 
@@ -1325,26 +1337,29 @@
                 html += '<tr>';
                 html += '<td>' + (i + 1) + '</td>';
                 html += '<td>' + escapeHtml(s.room) + '</td>';
-                html += '<td><img src="' + s.signature + '" width="80" height="30" /></td>';
+                html += '<td><img class="sig-img" src="' + s.signature + '" /></td>';
                 html += '<td>' + escapeHtml(s.phone) + '</td>';
                 html += '<td>' + formatDateTime(s.time) + '</td>';
                 html += '</tr>';
             });
 
-            html += '</table></body></html>';
+            html += '</table>';
+            html += '<div class="footer">共 ' + adminSignatures.length + ' 条签名记录 | 导出时间：' + formatDateTime(new Date().toISOString()) + '</div>';
+            html += '<div class="no-print" style="text-align:center;margin-top:12px;"><button onclick="window.print()" style="padding:10px 30px;font-size:15px;border:none;border-radius:8px;background:#667eea;color:#fff;cursor:pointer;">打印 / 另存为PDF</button></div>';
+            html += '</body></html>';
 
-            // 下载为xls文件
-            const blob = new Blob(['\uFEFF' + html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+            // 下载为HTML文件
+            const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = '锦岸花园签名表_' + new Date().toISOString().split('T')[0] + '.xls';
+            a.download = '锦岸花园签名表_' + new Date().toISOString().split('T')[0] + '.html';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
 
-            showToast('导出成功');
+            showToast('导出成功，请用浏览器打开查看');
         } catch(err) {
             console.error('导出失败:', err);
             showToast('导出失败，请重试');
