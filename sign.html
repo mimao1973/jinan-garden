@@ -1313,43 +1313,36 @@
         showLoading('正在准备导出...');
 
         try {
-            // 动态加载SheetJS
-            if (typeof XLSX === 'undefined') {
-                const script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
-                document.head.appendChild(script);
-                await new Promise((resolve, reject) => {
-                    script.onload = resolve;
-                    script.onerror = reject;
-                });
-            }
+            // 生成HTML表格（带签名图片），Excel和WPS都能打开
+            let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">';
+            html += '<head><meta charset="utf-8">';
+            html += '<style>td{border:1px solid #000;padding:6px 8px;text-align:center;vertical-align:middle;font-size:12px;font-family:"微软雅黑",sans-serif;} th{border:1px solid #000;padding:8px;background:#f0f0f0;font-weight:bold;font-size:13px;text-align:center;}</style>';
+            html += '</head><body>';
+            html += '<table>';
+            html += '<tr><th>序号</th><th>房号</th><th>业主签名</th><th>手机尾号</th><th>签名时间</th></tr>';
 
-            // 准备数据
-            const data = adminSignatures.map((s, i) => ({
-                '序号': i + 1,
-                '房号': s.room,
-                '手机尾号': s.phone,
-                '签名时间': formatDateTime(s.time)
-            }));
+            adminSignatures.forEach((s, i) => {
+                html += '<tr>';
+                html += '<td>' + (i + 1) + '</td>';
+                html += '<td>' + escapeHtml(s.room) + '</td>';
+                html += '<td><img src="' + s.signature + '" width="80" height="30" /></td>';
+                html += '<td>' + escapeHtml(s.phone) + '</td>';
+                html += '<td>' + formatDateTime(s.time) + '</td>';
+                html += '</tr>';
+            });
 
-            // 创建工作表
-            const ws = XLSX.utils.json_to_sheet(data);
+            html += '</table></body></html>';
 
-            // 设置列宽
-            ws['!cols'] = [
-                { wch: 6 },
-                { wch: 15 },
-                { wch: 12 },
-                { wch: 20 }
-            ];
-
-            // 创建工作簿
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, '签名记录');
-
-            // 下载文件
-            const fileName = '锦岸花园签名表_' + new Date().toISOString().split('T')[0] + '.xlsx';
-            XLSX.writeFile(wb, fileName);
+            // 下载为xls文件
+            const blob = new Blob(['\uFEFF' + html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '锦岸花园签名表_' + new Date().toISOString().split('T')[0] + '.xls';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
 
             showToast('导出成功');
         } catch(err) {
