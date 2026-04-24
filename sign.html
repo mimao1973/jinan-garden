@@ -17,52 +17,13 @@
         .home-page { padding-bottom: 80px; }
 
         .header {
-            background: rgba(255,255,255,0.92);
-            border-bottom-left-radius: 24px;
-            border-bottom-right-radius: 24px;
-            padding: 0 20px 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
-            min-height: 180px;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            justify-content: center;
         }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: url('jinan-bg.jpg') center center / cover no-repeat;
-            opacity: 0.5;
-            z-index: 0;
-        }
-        .header::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 5px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-            z-index: 1;
-        }
-        .header h1, .header .subtitle {
-            position: relative;
-            z-index: 1;
-        }
-        .header h1 {
-            font-size: 22px;
-            text-align: center;
-            color: #333;
-            margin-bottom: 6px;
-            letter-spacing: 2px;
-        }
-        .header .subtitle {
-            text-align: center;
-            font-size: 14px;
-            color: #333;
-            margin-bottom: 4px;
-            margin-top: 8px;
+        .header img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
         .topic-card {
             background: linear-gradient(135deg, #ff6b6b, #ee5a24);
@@ -666,8 +627,7 @@
 <!-- 首页 -->
 <div class="home-page" id="homePage">
     <div class="header">
-        <div class="subtitle">在线电子签名 · 共建美好家园</div>
-        <h1>锦岸花园签名表</h1>
+        <img src="jinan-header.jpg" alt="锦岸花园签名表">
     </div>
 
     <div class="topic-card">
